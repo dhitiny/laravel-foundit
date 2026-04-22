@@ -41,7 +41,7 @@
         </div>
 
         <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Register Now</button>
+            <button type="submit" class="btn btn-primary">Register</button>
         </div>
 
         <div class="text-center mt-3">
