@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RegisterController; // Pastikan LoginController juga di-import
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,7 +43,13 @@ Route::get('/logout', function () {
     Auth::logout();
     Session::invalidate();
     Session::regenerateToken();
+
     return redirect('/register');
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/admin-postingan', [PostinganController::class, 'index'])->name('admin.index');
+Route::get('/admin-postingan/terima/{id_item}', [PostinganController::class, 'terima'])->name('admin.postingan.terima');
+Route::get('/admin-postingan/tolak/{id_item}', [PostinganController::class, 'tolak'])->name('admin.postingan.tolak');
+Route::get('/admin-postingan/selesai/{id_item}', [PostinganController::class, 'selesai'])->name('admin.postingan.selesai');
