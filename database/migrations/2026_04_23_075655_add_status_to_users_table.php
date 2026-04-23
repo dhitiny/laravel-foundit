@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            // Menambahkan kolom status setelah kolom role
+            $table->enum('status', ['aktif', 'non-aktif', 'banned'])->default('aktif')->after('role');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            // Menghapus kolom status jika migrasi dibatalkan
+            $table->dropColumn('status');
         });
     }
 };
