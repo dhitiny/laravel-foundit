@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 
 Route::get('/', function () {
@@ -18,6 +22,9 @@ Route::get('/dashboard', function () {
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
+
+// fitur filter barang
+Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
