@@ -19,11 +19,11 @@
                     <table class="min-w-full table-auto border-collapse">
                         <thead>
                             <tr class="bg-gray-100 text-left text-sm uppercase font-semibold text-gray-600">
-                                <th class="px-6 py-3 border-b">Nama / Username</th>
+                                <th class="px-6 py-3 border-b">Username</th>
                                 <th class="px-6 py-3 border-b">Email</th>
                                 <th class="px-6 py-3 border-b">Tanggal Bergabung</th>
                                 <th class="px-6 py-3 border-b">Status Sekarang</th>
-                                <th class="px-6 py-3 border-b text-center">Aksi (Ubah Status)</th>
+                                <th class="px-6 py-3 border-b text-center">Ubah Status</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 text-sm">

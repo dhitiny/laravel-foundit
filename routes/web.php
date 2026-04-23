@@ -21,13 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // Aktivitas Saya (Kriteria: Pengguna memantau postingan/klaim)
-    // Route::get('/aktivitas-saya', [ActivityController::class, 'index'])->name('aktivitas.saya');
 });
 
 // 4. Manajemen Akun (KHUSUS ADMIN)
-// Sebaiknya tambahkan pengecekan role di sini
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::patch('/admin/users/{user}/status', [UserController::class, 'updateStatus'])->name('admin.users.updateStatus');
