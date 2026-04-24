@@ -3,7 +3,9 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController; // Pastikan LoginController juga di-import
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserPostinganHilangController;
+use App\Http\Controllers\UserPostinganTemuanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -53,3 +55,6 @@ Route::get('/admin-postingan', [PostinganController::class, 'index'])->name('adm
 Route::get('/admin-postingan/terima/{id_item}', [PostinganController::class, 'terima'])->name('admin.postingan.terima');
 Route::get('/admin-postingan/tolak/{id_item}', [PostinganController::class, 'tolak'])->name('admin.postingan.tolak');
 Route::get('/admin-postingan/selesai/{id_item}', [PostinganController::class, 'selesai'])->name('admin.postingan.selesai');
+Route::get('/status-temuan', [UserPostinganTemuanController::class, 'index']);
+Route::get('/status-hilang', [UserPostinganHilangController::class, 'index']);
+Route::delete('/barang/batal/{id}', [UserPostinganHilangController::class, 'destroy'])->name('barang.destroy');
