@@ -9,26 +9,22 @@ class UserPostinganHilangController extends Controller
 {
     public function index()
     {
-        // Untuk sementara Auth dimatikan sesuai permintaanmu biar bisa lihat hasil
-        // Nanti kalau sudah kelar semua, aktifkan lagi baris di bawah ini:
-        // $userId = Auth::id();
-
-        // Ambil semua data barang (nanti ganti jadi milik user login)
-        $semua_barang = Barang::orderBy('created_at', 'desc')->get();
+        // Mengambil data barang milik user yang sedang login dengan kategori 'hilang'
+        $semua_barang = Barang::where('id_user', Auth::id())
+                              ->where('status', 'hilang')
+                              ->orderBy('id_item', 'desc')
+                              ->get();
 
         return view('auth.statushilanguser', compact('semua_barang'));
     }
 
-    // FUNGSI BARU UNTUK MEMBATALKAN POSTINGAN
     public function destroy($id)
     {
-        $barang = Barang::findOrFail($id);
+        $barang = Barang::where('id_item', $id)->where('id_user', Auth::id())->firstOrFail();
 
-        // Kita tidak hapus permanen, tapi ubah statusnya jadi 'Dibatalkan'
-        // Supaya muncul di kotak statistik "Laporan Dibatalkan"
-        $barang->status = 'Dibatalkan';
-        $barang->save();
+        // Opsional: Jika ingin hapus permanen dari DB
+        $barang->delete();
 
-        return redirect()->back()->with('success', 'Laporan berhasil dibatalkan!');
+        return redirect()->back()->with('success', 'Laporan barang hilang berhasil dihapus!');
     }
 }

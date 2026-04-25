@@ -2,31 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Barang extends Model
 {
-    use HasFactory;
-
     protected $table = 'barang';
-
     protected $primaryKey = 'id_item';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_user',
-        'id_kategori',
         'nama_barang',
+        'id_kategori',
         'deskripsi',
-        'foto_barang',
         'lokasi_temuan',
         'tanggal_temuan',
-        'status',
-        'cp',
+        'status',       // Berisi 'hilang' atau 'temuan'
+        'status_admin', // Kolom baru yang kamu buat di phpMyAdmin
+        'foto_barang',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id');
-    }
 }
