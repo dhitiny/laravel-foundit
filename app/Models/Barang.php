@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Barang extends Model
 {
     protected $table = 'barang';
-<<<<<<< HEAD
-    protected $primaryKey = 'id_item';
+    protected $primaryKey = 'id_item';git
     public $timestamps = false;
 
     protected $fillable = [
@@ -22,8 +21,8 @@ class Barang extends Model
         'status_admin', // Kolom baru yang kamu buat di phpMyAdmin
         'foto_barang',
     ];
-=======
+
 protected $primaryKey = 'id_item';
 protected $fillable = ['id_kategori', 'nama_barang', 'deskripsi', 'status']; 
->>>>>>> fitur-filter
+
 }
