@@ -4,11 +4,11 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PostBarangTemuanController;
-use App\Http\Controllers\PostBarangHilangController; // JANGAN LUPA IMPORT INI LE
+use App\Http\Controllers\PostBarangHilangController; 
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini
-use Illuminate\Support\Facades\Session; // Tambahkan ini
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Session; 
 
 
 // 1. Rute Publik (BISA DIAKSES TANPA LOGIN)
