@@ -5,6 +5,7 @@ use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RegisterController;
+<<<<<<< HEAD
 
 use App\Http\Controllers\PostBarangTemuanController;
 use App\Http\Controllers\PostBarangHilangController; 
@@ -40,6 +41,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
+=======
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ItemController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Admin\UserController;
+>>>>>>> fitur-filter
 
 
 // 1. Rute Publik
@@ -47,12 +56,18 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
+
+// fitur filter barang
+Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+
+
 // 2. Rute Dashboard (Bisa diakses semua yang login)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // 3. Rute Profile (User Biasa)
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
