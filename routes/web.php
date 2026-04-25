@@ -1,14 +1,20 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RegisterController;
+
 use App\Http\Controllers\PostBarangTemuanController;
 use App\Http\Controllers\PostBarangHilangController; 
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Session; 
+use App\Http\Controllers\UserPostinganHilangController;
+use App\Http\Controllers\UserPostinganTemuanController;
+
 
 
 // 1. Rute Publik (BISA DIAKSES TANPA LOGIN)
@@ -68,5 +74,13 @@ Route::post('/logout', function () {
 })->name('logout');
 
 // Memanggil rute bawaan Laravel Breeze (Login, Register, Reset Password)
->>>>>>> origin/fitur-manajemen-akun-user
 require __DIR__.'/auth.php';
+
+Route::get('/admin-postingan', [PostinganController::class, 'index'])->name('admin.index');
+Route::get('/admin-postingan/terima/{id_item}', [PostinganController::class, 'terima'])->name('admin.postingan.terima');
+Route::get('/admin-postingan/tolak/{id_item}', [PostinganController::class, 'tolak'])->name('admin.postingan.tolak');
+Route::get('/admin-postingan/selesai/{id_item}', [PostinganController::class, 'selesai'])->name('admin.postingan.selesai');
+Route::get('/status-temuan', [UserPostinganTemuanController::class, 'index']);
+Route::get('/status-hilang', [UserPostinganHilangController::class, 'index']);
+Route::delete('/barang/batal/{id}', [UserPostinganHilangController::class, 'destroy'])->name('barang.destroy');
+
