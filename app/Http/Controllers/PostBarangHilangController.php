@@ -2,39 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang; // Pakai model Barang yang utama
 use Illuminate\Http\Request;
 
 class PostBarangHilangController extends Controller
 {
-public function index() {
-$items = \App\Models\PostBarangHilang::latest()->get();
-return view('PostBarangHilang.index', compact('items'));
-}
+    // Fungsi index kita hapus karena daftar postingan sudah diurus UserPostinganHilangController
 
-public function create() {
-    return view('PostBarangHilang.create');
-}
+    public function create()
+    {
+        return view('PostBarangHilang.create');
+    }
 
-public function store(Request $request) {
-    $request->validate([
-        'item_name' => 'required',
-        'location' => 'required',
-        'lost_date' => 'required|date',
-        'description' => 'required',
-        'image' => 'nullable|image|max:2048',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'item_name' => 'required',
+            'location' => 'required',
+            'lost_date' => 'required|date',
+            'description' => 'required',
+            'kategori' => 'required',
+            'image' => 'nullable|image|max:2048',
+        ]);
 
-    $path = $request->file('image') ? $request->file('image')->store('lost_items', 'public') : null;
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('lost_items', 'public') : null;
 
-    \App\Models\PostBarangHilang::create([
-        'user_id' => auth()->id(),
-        'item_name' => $request->item_name,
-        'location' => $request->location,
-        'lost_date' => $request->lost_date,
-        'description' => $request->description,
-        'image' => $path,
-    ]);
+        Barang::create([
+            'id_user' => auth()->id(),
+            'nama_barang' => $request->item_name,
+            'kategori' => $request->kategori,
+            'deskripsi' => $request->description,
+            'lokasi' => $request->location,
+            'tanggal_kejadian' => $request->lost_date,
+            'foto_barang' => $imagePath,
+            'jenis_barang' => 'hilang',             // Pembeda di kolom jenis_barang
+            'status' => 'pending',            // Status untuk admin
+        ]);
 
-    return redirect()->route('PostBarangHilang.index')->with('success', 'Laporan kehilangan berhasil diposting!');
-}
+        return redirect()->route('status.hilang.user')->with('success', 'Laporan kehilangan berhasil diposting!');
+    }
 }

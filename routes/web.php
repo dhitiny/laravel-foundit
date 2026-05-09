@@ -1,37 +1,35 @@
 <?php
 
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DetailBarangController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PostBarangHilangController;
+use App\Http\Controllers\PostBarangTemuanController;
 use App\Http\Controllers\PostinganController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\PostBarangTemuanController;
-use App\Http\Controllers\PostBarangHilangController; 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserPostinganHilangController;
 use App\Http\Controllers\UserPostinganTemuanController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth; 
-use Illuminate\Support\Facades\Session; 
+use Illuminate\Support\Facades\Session;
 
 // 1. RUTE PUBLIK
-Route::get('/', function () { 
-    return view('welcome'); 
+Route::get('/', function () {
+    return view('welcome');
 })->name('landing');
 
 // Fitur Filter Barang (Punya Lu)
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 
 // --- FITUR BARANG TEMUAN ---
-Route::get('/PostBarangTemuan', [PostBarangTemuanController::class, 'index'])->name('PostBarangTemuan.index');
 Route::get('/PostBarangTemuan/create', [PostBarangTemuanController::class, 'create'])->name('PostBarangTemuan.create');
 Route::post('/PostBarangTemuan', [PostBarangTemuanController::class, 'store'])->name('PostBarangTemuan.store');
 
 // --- FITUR BARANG HILANG ---
-Route::get('/PostBarangHilang', [PostBarangHilangController::class, 'index'])->name('PostBarangHilang.index');
 Route::get('/PostBarangHilang/create', [PostBarangHilangController::class, 'create'])->name('PostBarangHilang.create');
 Route::post('/PostBarangHilang', [PostBarangHilangController::class, 'store'])->name('PostBarangHilang.store');
-
 
 // 2. AUTH & DASHBOARD
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
@@ -40,7 +38,7 @@ Route::get('/login', function () { return view('auth.login'); })->name('login');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-    
+
     // Rute Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -57,9 +55,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin-postingan/selesai/{id_item}', [PostinganController::class, 'selesai'])->name('admin.postingan.selesai');
 
     // 5. STATUS USER
-    Route::get('/status-temuan', [UserPostinganTemuanController::class, 'index']);
-    Route::get('/status-hilang', [UserPostinganHilangController::class, 'index']);
+    Route::get('/status-temuan', [UserPostinganTemuanController::class, 'index'])->name('status.temuan.user');
+    Route::get('/status-hilang', [UserPostinganHilangController::class, 'index'])->name('status.hilang.user');
     Route::delete('/barang/batal/{id}', [UserPostinganHilangController::class, 'destroy'])->name('barang.destroy');
+
+    // 6.View Detail Barang
+    Route::get('/barang/detail/{id}', [DetailBarangController::class, 'show'])->name('barang.detail');
+    Route::get('/home', [HomeController::class, 'index'])->name('home-page');
 });
 
 // Logout
@@ -67,6 +69,7 @@ Route::post('/logout', function () {
     Auth::logout();
     Session::invalidate();
     Session::regenerateToken();
+
     return redirect('/');
 })->name('logout');
 

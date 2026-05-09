@@ -2,49 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang; // Pakai model Barang yang sudah kita bahas tadi
 use Illuminate\Http\Request;
-use App\Models\PostBarangTemuan; 
-use Illuminate\Support\Facades\Auth;
 
 class PostBarangTemuanController extends Controller
 {
-    public function index()
-    {
-        $items = PostBarangTemuan::latest()->get();
-        // REVISI: Pakai folder Temuan
-        return view('PostBarangTemuan.index', compact('items'));
-    }
+    // Fungsi index dihapus karena kita pakai UserPostinganTemuanController untuk lihat status
 
     public function create()
     {
-        // REVISI: Pakai folder Temuan
-        return view('PostBarangTemuan.create'); 
+        return view('PostBarangTemuan.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'item_name'   => 'required|string|max:255',
-            'location'    => 'required|string|max:255',
-            'found_date'  => 'required|date',
+            'item_name' => 'required',
+            'location' => 'required',
+            'found_date' => 'required|date',
             'description' => 'required',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'kategori' => 'required',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('found_items', 'public');
-        }
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('found_items', 'public') : null;
 
-        PostBarangTemuan::create([
-            'user_id'     => Auth::id(),
-            'item_name'   => $request->item_name,
-            'location'    => $request->location,
-            'found_date'  => $request->found_date,
-            'description' => $request->description,
-            'image'       => $imagePath,
+        Barang::create([
+            'id_user' => auth()->id(),
+            'nama_barang' => $request->item_name,
+            'kategori' => $request->kategori,
+            'deskripsi' => $request->description,
+            'lokasi' => $request->location,
+            'tanggal_kejadian' => $request->found_date,
+            'foto_barang' => $imagePath,
+            'jenis_barang' => 'temuan',             // Pembeda di kolom jenis_barang
+            'status' => 'pending',            // Status untuk admin
         ]);
 
-        return redirect()->route('PostBarangTemuan.index')->with('success', 'Berhasil diposting!');
+        return redirect()->route('status.temuan.user')->with('success', 'Laporan temuan berhasil diposting!');
     }
 }

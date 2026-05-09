@@ -16,24 +16,25 @@ class PostinganController extends Controller
     public function terima($id_item)
     {
         $barang = Barang::findOrFail($id_item);
-        $barang->update(['status_admin' => 'Approved']);
+        // Langsung update kolom status
+        $barang->update(['status' => 'Approved']);
 
-        return redirect()->back()->with('success', 'Postingan telah disetujui.');
+        return redirect()->back();
     }
 
     public function tolak($id_item)
     {
         $barang = Barang::findOrFail($id_item);
-        $barang->update(['status_admin' => 'Rejected']);
+        $barang->update(['status' => 'Rejected']);
 
-        return redirect()->back()->with('error', 'Postingan telah ditolak.');
+        return redirect()->back();
     }
 
     public function selesai($id_item)
     {
         $barang = Barang::findOrFail($id_item);
-        $barang->update(['status_admin' => 'Selesai']);
+        $barang->update(['status' => 'Selesai']);
 
-        return redirect()->back()->with('success', 'Laporan telah selesai.');
+        return redirect()->back();
     }
 }

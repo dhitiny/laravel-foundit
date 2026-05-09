@@ -1,195 +1,116 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Postingan Hilang - FoundIt</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
-    <style>
-        /* Mencegah halaman bisa digeser ke kanan-kiri (Fix Scroll Horizontal) */
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
-            background-color: #f8f9fa;
-        }
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Riwayat Barang Hilang Saya') }}
+            </h2>
+            <a href="/dashboard" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 transition shadow-sm">
+                Dashboard
+            </a>
+        </div>
+    </x-slot>
 
-        /* Styling Gambar Preview */
-        .img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
-        
-        /* Styling Badge Status Admin */
-        .badge { padding: 6px 10px; font-size: 0.75rem; border-radius: 6px; }
-        
-        /* Teks Status (HILANG/TEMUAN) tanpa warna */
-        .status-label { font-size: 0.85rem; font-weight: 600; color: #555; text-transform: uppercase; }
-        
-        /* Card Statistik (Widget) */
-        .card-stats { border: none; border-radius: 12px; transition: transform 0.2s; background: #fff; }
-        .card-stats:hover { transform: translateY(-5px); }
-        
-        /* Kotak Ikon di dalam Widget */
-        .icon-box { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-        
-        /* Merapikan Row agar tidak offset ke samping */
-        .row { margin-left: 0; margin-right: 0; }
-        
-        /* Responsif untuk layar kecil */
-        @media (max-width: 768px) {
-            .col-md-3 { width: 50%; } /* Jadi 2 kotak per baris di HP */
-        }
-    </style>
-</head>
-<body>
-
-<div class="container-fluid py-5 px-4">
-    <div class="mb-4 ps-2">
-        <h3 class="fw-bold text-dark mb-1">Riwayat Barang Hilang Saya</h3>
-        <p class="text-muted">Pantau status laporan barang hilang Anda di sini.</p>
-    </div>
-
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card card-stats shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-primary-subtle text-primary me-3">
-                        <i class="bi bi-megaphone"></i>
-                    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center">
+                    <div class="p-3 rounded-lg bg-blue-100 text-blue-600 mr-4">📦</div>
                     <div>
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">Total Laporan</small>
-                        <h5 class="fw-bold m-0">{{ $semua_barang->count() }}</h5>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Total</p>
+                        <h4 class="text-xl font-bold text-gray-800">{{ $semua_barang->count() }}</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center">
+                    <div class="p-3 rounded-lg bg-indigo-100 text-indigo-600 mr-4">✔️</div>
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Approved</p>
+                        <h4 class="text-xl font-bold text-gray-800">{{ $semua_barang->where('status', 'APPROVED')->count() }}</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center">
+                    <div class="p-3 rounded-lg bg-green-100 text-green-600 mr-4">✅</div>
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Selesai</p>
+                        <h4 class="text-xl font-bold text-gray-800">{{ $semua_barang->where('status', 'SELESAI')->count() }}</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-center">
+                    <div class="p-3 rounded-lg bg-red-100 text-red-600 mr-4">🚫</div>
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Dibatalkan</p>
+                        <h4 class="text-xl font-bold text-gray-800">{{ $semua_barang->where('status', 'REJECTED')->count() }}</h4>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card card-stats shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-success-subtle text-success me-3">
-                        <i class="bi bi-check2-all"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">Sudah Ditemukan</small>
-                        <h5 class="fw-bold m-0">{{ $semua_barang->where('status_admin', 'Selesai')->count() }}</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card card-stats shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-warning-subtle text-warning me-3">
-                        <i class="bi bi-clock-history"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">Menunggu Acc</small>
-                        <h5 class="fw-bold m-0">{{ $semua_barang->where('status_admin', 'Pending')->count() }}</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card card-stats shadow-sm h-100">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-danger-subtle text-danger me-3">
-                        <i class="bi bi-x-circle"></i>
-                    </div>
-                    <div>
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">Dibatalkan</small>
-                        <h5 class="fw-bold m-0">{{ $semua_barang->where('status_admin', 'Rejected')->count() }}</h5>
-                    </div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-100">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama & Kategori</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lokasi & Waktu</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse($semua_barang as $item)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($item->foto_barang)
+                                        <img src="{{ asset('storage/' . $item->foto_barang) }}" class="h-14 w-14 object-cover rounded-lg border shadow-sm">
+                                    @else
+                                        <div class="h-14 w-14 bg-gray-100 flex items-center justify-center rounded-lg border border-dashed text-gray-400 text-[10px]">No Pic</div>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-bold text-blue-600">{{ $item->nama_barang }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase tracking-tighter">{{ $item->kategori }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-xs text-gray-500 truncate w-40">{{ $item->deskripsi ?? '-' }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-700 font-medium">📍 {{ $item->lokasi }}</div>
+                                    <div class="text-xs text-gray-400 mt-1 italic">{{ $item->tanggal_kejadian }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @php
+                                        $st = strtoupper($item->status ?? 'PENDING');
+                                        $stColor = match($st) {
+                                            'APPROVED' => 'bg-green-100 text-green-800 border-green-200',
+                                            'REJECTED' => 'bg-red-100 text-red-800 border-red-200',
+                                            'SELESAI' => 'bg-blue-100 text-blue-800 border-blue-200',
+                                            default => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                                        };
+                                    @endphp
+                                    <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full border {{ $stColor }}">
+                                        {{ $st }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <form action="{{ route('user.postingan.hilang.destroy', $item->id_item) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-full transition">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-12 text-center text-gray-500 italic">Belum ada laporan barang hilang.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    <div class="card shadow-sm border-0 overflow-hidden">
-        <div class="card-header bg-white py-3">
-            <h6 class="fw-bold m-0 text-dark"><i class="bi bi-list-stars me-2 text-primary"></i>Daftar Laporan Hilang</h6>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-secondary">
-                        <tr>
-                            <th class="ps-4">Foto</th>
-                            <th>ID</th>
-                            <th>Nama Barang</th>
-                            <th>Deskripsi</th>
-                            <th>Lokasi</th>
-                            <th>Waktu</th>
-                            <th>Jenis</th>
-                            <th>Status Admin</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($semua_barang as $item)
-                        <tr>
-                            <td class="ps-4">
-                                @if($item->foto_barang)
-                                    <img src="{{ asset('storage/' . $item->foto_barang) }}" class="img-preview">
-                                @else
-                                    <div class="img-preview d-flex align-items-center justify-content-center bg-secondary-subtle text-muted small">No Pic</div>
-                                @endif
-                            </td>
-                            <td class="text-muted small">#{{ $item->id_item }}</td>
-                            <td class="fw-bold text-primary">{{ $item->nama_barang }}</td>
-                            <td class="small text-muted" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                {{ $item->deskripsi ?? '-' }}
-                            </td>
-                            <td class="small">{{ $item->lokasi_temuan }}</td>
-                            <td class="small">{{ $item->tanggal_temuan }}</td>
-                            <td class="status-label">{{ $item->status }}</td>
-                            <td>
-                                @if($item->status_admin == 'Approved')
-                                    <span class="badge bg-success text-white">Disetujui</span>
-                                @elseif($item->status_admin == 'Rejected')
-                                    <span class="badge bg-danger text-white">Ditolak</span>
-                                @elseif($item->status_admin == 'Selesai')
-                                    <span class="badge bg-primary text-white">Selesai</span>
-                                @else
-                                    <span class="badge bg-warning text-dark">{{ $item->status_admin ?? 'Pending' }}</span>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <form action="{{ route('user.postingan.hilang.destroy', $item->id_item) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm text-danger border-0">
-                                        <i class="bi bi-trash fs-5"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="9" class="text-center py-5 text-muted">Belum ada laporan barang hilang.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    
-    <div class="mt-4">
-        <a href="/dashboard" class="btn btn-sm btn-outline-secondary px-4 shadow-sm rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Kembali ke Dashboard
-        </a>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</x-app-layout>

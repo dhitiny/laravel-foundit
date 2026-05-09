@@ -13,13 +13,17 @@ class Barang extends Model
     protected $fillable = [
         'id_user',
         'nama_barang',
-        'id_kategori',
+        'kategori',
         'deskripsi',
-        'lokasi_temuan',
-        'tanggal_temuan',
-        'status',       
-        'status_admin', 
+        'lokasi',
+        'tanggal_kejadian',
         'foto_barang',
+        'jenis_barang',
+        'status',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
