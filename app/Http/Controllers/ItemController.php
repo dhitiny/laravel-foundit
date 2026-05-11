@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PostBarangHilang;
+use App\Models\PostBarangTemuan;
 
 class ItemController extends Controller
 {
@@ -20,5 +22,34 @@ class ItemController extends Controller
         'items' => $items->get(),
         'categories' => $categories
     ]);
+}
+        public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $barangHilang = PostBarangHilang::where('item_name', 'LIKE', "%{$query}%")
+                        ->orWhere('location', 'LIKE', "%{$query}%")
+                        ->get();
+
+        $barangTemuan = PostBarangTemuan::where('item_name', 'LIKE', "%{$query}%")
+                        ->orWhere('location', 'LIKE', "%{$query}%")
+                        ->get();
+
+        return view('searchpage', compact('barangHilang', 'barangTemuan', 'query'));
+    }
+
+    public function result(Request $request)
+{
+    $query = $request->input('query');
+
+    $barangHilang = \App\Models\PostBarangHilang::where('item_name', 'LIKE', "%{$query}%")
+                    ->orWhere('location', 'LIKE', "%{$query}%")
+                    ->get();
+
+    $barangTemuan = \App\Models\PostBarangTemuan::where('item_name', 'LIKE', "%{$query}%")
+                    ->orWhere('location', 'LIKE', "%{$query}%")
+                    ->get();
+
+    return view('searchpage', compact('barangHilang', 'barangTemuan', 'query'));
 }
 }
