@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserPostinganHilangController;
 use App\Http\Controllers\UserPostinganTemuanController;
+use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Session; 
@@ -32,6 +33,8 @@ Route::get('/PostBarangHilang', [PostBarangHilangController::class, 'index'])->n
 Route::get('/PostBarangHilang/create', [PostBarangHilangController::class, 'create'])->name('PostBarangHilang.create');
 Route::post('/PostBarangHilang', [PostBarangHilangController::class, 'store'])->name('PostBarangHilang.store');
 
+Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+Route::get('/search', [ItemController::class, 'search'])->name('search.results');
 
 // 2. AUTH & DASHBOARD
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
@@ -39,8 +42,8 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/login', function () { return view('auth.login'); })->name('login');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-    
+    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+    Route::get('/searchpage', [ItemController::class, 'result'])->name('searchpage');
     // Rute Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
