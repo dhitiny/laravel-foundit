@@ -4,9 +4,9 @@
             
             <!-- Tombol Kembali Ke Dashboard -->
             <div class="mb-4">
-                <a href="{{ route('home-page') }}" class="text-gray-500 hover:text-gray-700 flex items-center text-sm font-medium transition duration-200">
-                    <i class="bi bi-arrow-left mr-2"></i> Kembali
-                </a>
+               <a href="{{ route('homepage') }}" class="text-gray-500 hover:text-gray-700 flex items-center text-sm font-medium transition duration-200">
+    <i class="bi bi-arrow-left mr-2"></i> Kembali
+</a>
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm rounded-3xl border border-gray-100">
@@ -64,7 +64,8 @@
                                 <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                     <label class="text-[9px] font-bold text-gray-400 uppercase mb-1 block tracking-wider">Dilaporkan</label>
                                     <p class="text-gray-800 text-sm font-bold flex items-center">
-                                        <i class="bi bi-calendar3 text-[#f25e0d] mr-2"></i> {{ \Carbon\Carbon::parse($item->tanggal_kejadian)->format('d M Y') }}
+                                        <i class="bi bi-calendar3 text-[#f25e0d] mr-2"></i> 
+                                        {{ date('d M Y', strtotime($item->tanggal_kejadian)) }}
                                     </p>
                                 </div>
                             </div>
@@ -73,7 +74,7 @@
                         <!-- Bagian Action Buttons -->
                         <div>
                             <button class="w-full bg-[#f25e0d] hover:bg-[#d44d08] text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-100 transition duration-300 flex items-center justify-center uppercase tracking-[0.1em] text-sm">
-                                <i class="bi bi-check-circle-fill mr-2 text-lg"></i> Klaim Sekarang
+                                <i class="bi bi-check-circle-fill mr-2 text-lg"></i> Klaim Barang 
                             </button>
 
                             <!-- Alert Penting -->
@@ -92,7 +93,7 @@
             <!-- Footer Kecil -->
             <div class="mt-8 text-center">
                 <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">
-                    &copy; 2026 FoundIt UPI Purwakarta 
+                    &copy; 2026 FoundIt - The Founder 
                 </p>
             </div>
         </div>

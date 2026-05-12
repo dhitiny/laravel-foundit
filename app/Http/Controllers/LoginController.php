@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -11,22 +11,22 @@ class LoginController extends Controller
     {
         $credentials = $request->validate([
             'username' => ['required', 'string'],
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/dashboard');
             }
-            
-            return redirect()->intended('/user-page');
+
+            return redirect()->intended('/homepage');
         }
 
         return back()->withErrors([
             'username' => 'Wrong Username',
-        ])->onlyInput('username', 'email'); 
+        ])->onlyInput('username', 'email');
     }
 }

@@ -10,15 +10,15 @@ class UserPostinganTemuanController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            // User login: Lihat barang temuan miliknya sendiri (semua status)
+            // User login: Ambil barang temuan milik user tersebut
             $semua_barang = Barang::where('id_user', Auth::id())
                                   ->where('jenis_barang', 'temuan')
                                   ->orderBy('id_item', 'desc')
                                   ->get();
         } else {
-            // Tidak login: Tampilkan hanya yang sudah Approved untuk publik
+            // Tidak login: Ambil yang status_admin sudah Approved
             $semua_barang = Barang::where('jenis_barang', 'temuan')
-                                  ->where('status', 'Approved')
+                                  ->where('status_admin', 'Approved') 
                                   ->orderBy('id_item', 'desc')
                                   ->get();
         }

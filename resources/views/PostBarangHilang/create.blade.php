@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="flex items-center justify-end border-t pt-4">
-                        <a href="{{ route('dashboard') }}" class="mr-4 text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('homepage') }}" class="mr-4 text-sm text-gray-600 hover:underline">Batal</a>
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 transition shadow-md">
                             {{ __('Laporkan Kehilangan') }}
                         </button>

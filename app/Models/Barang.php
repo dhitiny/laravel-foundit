@@ -22,6 +22,11 @@ class Barang extends Model
         'status',
     ];
 
+    // Ini diletakkan di luar fillable
+    protected $casts = [
+        'tanggal_kejadian' => 'date',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
