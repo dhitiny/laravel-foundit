@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\DetailBarangController;
-use App\Http\Controllers\HomepageController; // Pakai punya temen lu
+use App\Http\Controllers\AdminMonitoringBarangController;
+use App\Http\Controllers\DetailBarangController; // Pakai punya temen lu
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PostBarangHilangController;
 use App\Http\Controllers\PostBarangTemuanController;
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/barang/detail/{barang}', [DetailBarangController::class, 'show'])->name('barang.detail');
     Route::get('/status-temuan', [UserPostinganTemuanController::class, 'index'])->name('status.temuan.user');
     Route::get('/status-hilang', [UserPostinganHilangController::class, 'index'])->name('status.hilang.user');
-    Route::delete('/barang/batal/{barang}', [UserPostinganHilangController::class, 'destroy'])->name('barang.destroy');
+    Route::delete('/barang/batal/{barang}', [UserPostinganHilangController::class, 'destroy'])->name('user.postingan.hilang.destroy');
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -62,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin-postingan/terima/{barang}', [PostinganController::class, 'terima'])->name('admin.postingan.terima');
     Route::get('/admin-postingan/tolak/{barang}', [PostinganController::class, 'tolak'])->name('admin.postingan.tolak');
     Route::get('/admin-postingan/selesai/{barang}', [PostinganController::class, 'selesai'])->name('admin.postingan.selesai');
+    Route::get('/admin/monitoring-hilang', [AdminMonitoringBarangController::class, 'hilang'])->name('admin.monitoring.hilang');
+    Route::get('/admin/monitoring-temuan', [AdminMonitoringBarangController::class, 'temuan'])->name('admin.monitoring.temuan');
 });
 
 // LOGOUT

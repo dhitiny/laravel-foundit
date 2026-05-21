@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('barang', function (Blueprint $table) {
             $table->id('id_item');
             $table->foreignId('id_user');
+            $table->foreignId('id_kategori');
             $table->string('nama_barang');
             $table->string('kategori');
             $table->text('deskripsi');

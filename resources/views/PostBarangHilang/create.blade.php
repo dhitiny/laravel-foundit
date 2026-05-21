@@ -22,22 +22,22 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="lost_date" class="block font-medium text-sm text-gray-700">Tanggal Hilang</label>
-                        <input type="date" name="lost_date" id="lost_date" value="{{ old('lost_date') }}" class="rounded-md shadow-sm border-gray-300 focus:border-red-500 focus:ring-red-500 block mt-1 w-full" required>
+                        <label for="lost_date" class="block font-medium text-sm text-gray-700">Tanggal & Waktu Hilang</label>
+                        <input type="datetime-local" name="lost_date" id="lost_date" value="{{ old('lost_date') }}" class="rounded-md shadow-sm border-gray-300 focus:border-red-500 focus:ring-red-500 block mt-1 w-full" required>
                     </div>
 
-                     <div class="mb-4">
-    <label for="kategori" class="block font-medium text-sm text-gray-700">Kategori Barang</label>
-    <select name="kategori" id="kategori" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 block mt-1 w-full" required>
-        <option value="">-- Pilih Kategori --</option>
-        <option value="Elektronik">Elektronik </option>
-        <option value="Dokumen">Dokumen </option>
-        <option value="Aksesoris">Aksesoris </option>
-        <option value="Pakaian">Pakaian </option>
-        <option value="Lainnya">Lainnya</option>
-    </select>
-    @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-</div>
+                    <div class="mb-4">
+                        <label for="kategori" class="block font-medium text-sm text-gray-700">Kategori Barang</label>
+                        <select name="kategori" id="kategori" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 block mt-1 w-full" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="Elektronik">Elektronik </option>
+                            <option value="Dokumen">Dokumen </option>
+                            <option value="Aksesoris">Aksesoris </option>
+                            <option value="Pakaian">Pakaian </option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
 
                     <div class="mb-4">
                         <label for="description" class="block font-medium text-sm text-gray-700">Deskripsi Ciri-ciri</label>

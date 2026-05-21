@@ -8,7 +8,7 @@ class Barang extends Model
 {
     protected $table = 'barang';
     protected $primaryKey = 'id_item';
-    public $timestamps = false;
+    public $timestamps = false; // Jika nanti ingin pakai created_at/updated_at bawaan, ini bisa diubah jadi true
 
     protected $fillable = [
         'id_user',
@@ -22,9 +22,9 @@ class Barang extends Model
         'status',
     ];
 
-    // Ini diletakkan di luar fillable
+    // Diubah ke datetime supaya jamnya ikut terbaca
     protected $casts = [
-        'tanggal_kejadian' => 'date',
+        'tanggal_kejadian' => 'datetime',
     ];
 
     public function user()

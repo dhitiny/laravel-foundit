@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang; // Pakai model Barang yang utama
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 class PostBarangHilangController extends Controller
@@ -19,7 +19,7 @@ class PostBarangHilangController extends Controller
         $request->validate([
             'item_name' => 'required',
             'location' => 'required',
-            'lost_date' => 'required|date',
+            'lost_date' => 'required', // Rule |date dilepas agar input datetime-local terbaca mulus beserta jamnya
             'description' => 'required',
             'kategori' => 'required',
             'image' => 'nullable|image|max:2048',
@@ -27,16 +27,19 @@ class PostBarangHilangController extends Controller
 
         $imagePath = $request->hasFile('image') ? $request->file('image')->store('lost_items', 'public') : null;
 
+        // Mengubah format string datetime-local menjadi format database Y-m-d H:i:s
+        $formattedDate = date('Y-m-d H:i:s', strtotime($request->lost_date));
+
         Barang::create([
             'id_user' => auth()->id(),
             'nama_barang' => $request->item_name,
             'kategori' => $request->kategori,
             'deskripsi' => $request->description,
             'lokasi' => $request->location,
-            'tanggal_kejadian' => $request->lost_date,
+            'tanggal_kejadian' => $formattedDate,
             'foto_barang' => $imagePath,
-            'jenis_barang' => 'hilang',             // Pembeda di kolom jenis_barang
-            'status' => 'pending',            // Status untuk admin
+            'jenis_barang' => 'hilang',
+            'status' => 'pending',
         ]);
 
         return redirect()->route('status.hilang.user')->with('success', 'Laporan kehilangan berhasil diposting!');

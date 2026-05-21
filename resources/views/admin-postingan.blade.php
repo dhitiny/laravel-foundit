@@ -25,7 +25,9 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama & Kategori</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelapor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi & Waktu</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
@@ -45,18 +47,28 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm font-bold text-gray-900">{{ $item->nama_barang }}</div>
-                                        <div class="text-[10px] text-gray-400 uppercase tracking-tighter">{{ $item->kategori ?? 'Semua' }}</div>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-semibold text-gray-800">{{ $item->user->name ?? $item->user->username ?? 'User Kosong' }}</div>
+                                        <div class="text-[10px] text-gray-500 font-mono">ID: #{{ $item->id_user ?? '-' }}</div>
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-bold text-gray-900">{{ $item->nama_barang }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs bg-gray-100 rounded text-gray-600 uppercase font-medium">{{ $item->kategori ?? 'Umum' }}</span>
+                                    </td>
+                                    
                                     <td class="px-6 py-4">
-                                        <div class="text-xs text-gray-500 truncate w-40" title="{{ $item->deskripsi }}">
+                                        <div class="text-xs text-gray-600 max-w-xs break-words">
                                             {{ $item->deskripsi ?? '-' }}
                                         </div>
                                     </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 font-medium">📍 {{ $item->lokasi }}</div>
-                                        <div class="text-[10px] text-gray-500 italic">{{ $item->tanggal_kejadian }}</div>
+                                        <div class="text-[10px] text-gray-500 italic">
+                                            📅 {{ $item->tanggal_kejadian ? \Carbon\Carbon::parse($item->tanggal_kejadian)->format('d M Y - H:i') : '-' }} WIB
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 py-0.5 inline-flex text-[10px] leading-5 font-bold rounded-full border {{ $item->jenis_barang == 'hilang' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200' }}">
@@ -67,7 +79,7 @@
                                         @php
                                             $st = strtoupper($item->status ?? 'PENDING');
                                             $colorClass = match($st) {
-                                                'APPROVED' => 'bg-green-500 text-black', // Approved teks hitam
+                                                'APPROVED' => 'bg-green-500 text-black',
                                                 'REJECTED' => 'bg-red-600 text-white',
                                                 'SELESAI'  => 'bg-blue-600 text-white',
                                                 default    => 'bg-yellow-300 text-yellow-900',
@@ -87,7 +99,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center text-gray-500 italic">
+                                    <td colspan="9" class="px-6 py-12 text-center text-gray-500 italic">
                                         Belum ada laporan masuk.
                                     </td>
                                 </tr>

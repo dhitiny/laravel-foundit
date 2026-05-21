@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang; // Pakai model Barang yang sudah kita bahas tadi
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 class PostBarangTemuanController extends Controller
@@ -19,7 +19,7 @@ class PostBarangTemuanController extends Controller
         $request->validate([
             'item_name' => 'required',
             'location' => 'required',
-            'found_date' => 'required|date',
+            'found_date' => 'required',
             'description' => 'required',
             'kategori' => 'required',
             'image' => 'nullable|image|max:2048',
@@ -27,16 +27,19 @@ class PostBarangTemuanController extends Controller
 
         $imagePath = $request->hasFile('image') ? $request->file('image')->store('found_items', 'public') : null;
 
+        // Mengubah format string datetime-local menjadi format database Y-m-d H:i:s
+        $formattedDate = date('Y-m-d H:i:s', strtotime($request->found_date));
+
         Barang::create([
             'id_user' => auth()->id(),
             'nama_barang' => $request->item_name,
             'kategori' => $request->kategori,
             'deskripsi' => $request->description,
             'lokasi' => $request->location,
-            'tanggal_kejadian' => $request->found_date,
+            'tanggal_kejadian' => $formattedDate,
             'foto_barang' => $imagePath,
-            'jenis_barang' => 'temuan',             // Pembeda di kolom jenis_barang
-            'status' => 'pending',            // Status untuk admin
+            'jenis_barang' => 'temuan',
+            'status' => 'pending',
         ]);
 
         return redirect()->route('status.temuan.user')->with('success', 'Laporan temuan berhasil diposting!');
