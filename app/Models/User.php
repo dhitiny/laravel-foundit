@@ -2,52 +2,46 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable; // 🚀 Tambahkan import ini
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+
+    // Tegaskan primary key tabel users adalah id_user
+    protected $primaryKey = 'id_user';
+
+    // Jika id_user di phpMyAdmin bertipe AI (Auto Increment) / Integer
+    protected $keyType = 'int';
+    public $incrementing = true;
+
     protected $fillable = [
-    'username',   
-    'email',
-    'password',
-    'whatsapp',   
-    'foto_profil',
-    'role',
-    'status',       
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
+        'username',
+        'email',
         'password',
-        'remember_token',
+        'whatsapp',
+        'foto_profil',
+        'role',
+        'status',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * 🚀 SUNTIKAN RELASI MANY-TO-MANY KE BADGE
+     * Menghubungkan user dengan badge melalui tabel pivot 'badge_user'.
      */
-    protected function casts(): array
+    /**
+     * Mengubah relasi menjadi HasMany (Satu user punya banyak data badge langsung).
+     */
+    public function badges()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        // 'id_user' di sini adalah nama kolom foreign key yang ada di tabel badges kamu
+        return $this->hasMany(Badge::class, 'id_user', 'id_user');
     }
+
+    // ... sisa kode casts dan hidden di bawahnya dibiarkan saja ya bubb
 }

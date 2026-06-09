@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Barang extends Model
 {
     protected $table = 'barang';
+
+    // Sesuaikan dengan phpMyAdmin kamu: 'id_item'
     protected $primaryKey = 'id_item';
-    public $timestamps = false; // Jika nanti ingin pakai created_at/updated_at bawaan, ini bisa diubah jadi true
+
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',
+        'id_kategori',
         'nama_barang',
         'kategori',
         'deskripsi',
@@ -22,13 +27,15 @@ class Barang extends Model
         'status',
     ];
 
-    // Diubah ke datetime supaya jamnya ikut terbaca
     protected $casts = [
         'tanggal_kejadian' => 'datetime',
     ];
 
-    public function user()
+    // Relasi ke tabel users
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user');
+        // Parameter 2: Foreign key di tabel barang ('id_user')
+        // Parameter 3: Primary key di tabel users ('id_user')
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 }

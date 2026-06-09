@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,13 +13,14 @@ return new class extends Migration
         // Pake huruf kecil semua biar sinkron sama Model & Database
         Schema::create('post_barang_temuan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
-            $table->string('item_name');          
-            $table->text('description');         
-            $table->string('location');          
-            $table->date('found_date');          
-            $table->string('image')->nullable(); 
-            $table->timestamps();                
+            // Pastikan parameter kedua dikunci ke 'id_user' sesuai dengan primary key tabel users kamu le!
+            $table->foreignId('user_id')->constrained('users', 'id_user')->onDelete('cascade');
+            $table->string('item_name');
+            $table->text('description');
+            $table->string('location');
+            $table->date('found_date');
+            $table->string('image')->nullable();
+            $table->timestamps();
         });
     }
 

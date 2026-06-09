@@ -38,16 +38,26 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
+    // Cari function authenticate() di dalam file ini dan ubah menjadi:
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // 1. Ambil input email dan password, lalu tambahkan syarat status harus 'active'
+        $credentials = array_merge($this->only('email', 'password'), ['status' => 'active']);
+
+        // 2. Lakukan attempt login dengan syarat di atas
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+            // 3. Opsi tambahan: Cek apakah gagal login karena statusnya memang 'banned'
+            $user = \App\Models\User::where('email', $this->email)->first();
+            if ($user && $user->status === 'banned') {
+                throw ValidationException::withMessages(['email' => 'Akun Anda telah ditangguhkan karena melanggar aturan platform FoundIt.']);
+            }
+
+            // 4. Jika gagal karena password salah atau alasan lain
+            throw ValidationException::withMessages(['email' => trans('auth.failed')]);
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -60,7 +70,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -68,12 +78,7 @@ class LoginRequest extends FormRequest
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
-        throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
+        throw ValidationException::withMessages(['email' => trans('auth.throttle', ['seconds' => $seconds, 'minutes' => ceil($seconds / 60)])]);
     }
 
     /**

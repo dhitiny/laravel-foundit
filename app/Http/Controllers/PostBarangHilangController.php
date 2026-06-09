@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini agar tidak error
 
 class PostBarangHilangController extends Controller
 {
-    // Fungsi index kita hapus karena daftar postingan sudah diurus UserPostinganHilangController
-
     public function create()
     {
         return view('PostBarangHilang.create');
@@ -19,7 +18,7 @@ class PostBarangHilangController extends Controller
         $request->validate([
             'item_name' => 'required',
             'location' => 'required',
-            'lost_date' => 'required', // Rule |date dilepas agar input datetime-local terbaca mulus beserta jamnya
+            'lost_date' => 'required',
             'description' => 'required',
             'kategori' => 'required',
             'image' => 'nullable|image|max:2048',
@@ -31,8 +30,9 @@ class PostBarangHilangController extends Controller
         $formattedDate = date('Y-m-d H:i:s', strtotime($request->lost_date));
 
         Barang::create([
-            'id_user' => auth()->id(),
+            'id_user' => Auth::id(), // Diubah dari auth()->id() ke Auth::id()
             'nama_barang' => $request->item_name,
+            'id_kategori' => $request->id_kategori, // <-- INI YANG HILANG! Lu harus kirim ID-nya (Angka 1/2/3), bukan cuma teks "Elektronik"
             'kategori' => $request->kategori,
             'deskripsi' => $request->description,
             'lokasi' => $request->location,
@@ -42,6 +42,6 @@ class PostBarangHilangController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('status.hilang.user')->with('success', 'Laporan kehilangan berhasil diposting!');
+        return redirect()->to('/status-hilang')->with('success', 'Laporan kehilangan berhasil diposting!');
     }
 }

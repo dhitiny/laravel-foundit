@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostBarangTemuanController extends Controller
 {
-    // Fungsi index dihapus karena kita pakai UserPostinganTemuanController untuk lihat status
-
     public function create()
     {
         return view('PostBarangTemuan.create');
@@ -27,11 +26,10 @@ class PostBarangTemuanController extends Controller
 
         $imagePath = $request->hasFile('image') ? $request->file('image')->store('found_items', 'public') : null;
 
-        // Mengubah format string datetime-local menjadi format database Y-m-d H:i:s
         $formattedDate = date('Y-m-d H:i:s', strtotime($request->found_date));
 
         Barang::create([
-            'id_user' => auth()->id(),
+            'id_user' => Auth::id(), // Pake Auth::id() biar Intelephense tenang
             'nama_barang' => $request->item_name,
             'kategori' => $request->kategori,
             'deskripsi' => $request->description,
@@ -42,6 +40,6 @@ class PostBarangTemuanController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('status.temuan.user')->with('success', 'Laporan temuan berhasil diposting!');
+        return redirect('/status-temuan')->with('success', 'Laporan temuan barang berhasil diposting!');
     }
 }

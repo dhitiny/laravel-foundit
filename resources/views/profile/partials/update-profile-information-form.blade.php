@@ -5,9 +5,9 @@
         </h2>
     </header>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
-        @csrf
-        @method('patch')
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+    @csrf
+    @method('patch') 
 
         <div>
             <x-input-label for="foto_profil" :value="__('Foto Profil')" />

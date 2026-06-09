@@ -19,10 +19,18 @@ class UserPostinganHilangController extends Controller
 
     public function destroy($id)
     {
-        // Cari barang berdasarkan ID dan milik user yang sedang login
         $barang = Barang::where('id_item', $id)->where('id_user', Auth::id())->firstOrFail();
         $barang->delete();
 
         return redirect()->back()->with('success', 'Laporan barang hilang berhasil dihapus!');
+    }
+
+    public function setSelesai($id)
+    {
+        $barang = Barang::where('id_item', $id)->where('id_user', Auth::id())->firstOrFail();
+        $barang->status = 'Selesai';
+        $barang->save();
+
+        return redirect()->back()->with('success', 'Status barang hilang berhasil diperbarui menjadi Selesai.');
     }
 }

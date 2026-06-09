@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f4f7f9; color: #333; }
-        .navbar-foundit { background-color: #041942; padding: 15px 0; }
-        .navbar-brand { font-weight: 800; font-size: 1.5rem; color: white !important; }
-        .nav-link { color: rgba(255,255,255,0.8) !important; font-weight: 500; }
-        .nav-link:hover { color: white !important; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f7f1e6; color: #333; }
+        .navbar-foundit { background-color: #f7f1e6; padding: 15px 0; }
+        .navbar-brand { font-weight: 800; font-size: 1.5rem; }
+        .nav-link { color: #001f3f !important; font-weight: 600; }
+        .nav-link:hover { color: #8b0000 !important; }
         .hero-banner { background: linear-gradient(135deg, #001f3f 0%, #8b0000 100%); padding: 60px 0 120px; color: white; text-align: center; }
         .search-wrapper { max-width: 700px; margin: -35px auto 0; position: relative; z-index: 10; }
         .search-bar { background: white; border-radius: 50px; padding: 10px 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: flex; align-items: center; }
@@ -27,26 +27,43 @@
     </style>
 </head>
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-foundit sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Found<span class="text-danger">It</span></a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/homepage" style="color: #750909;">
+                <img src="{{ asset('images/logo-foundit.png') }}" alt="Logo FoundIt" height="32" class="d-inline-block align-text-top">
+                <span>Found<span style="color: #212c6b;">It</span></span>
+            </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link active" href="/homepage">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#laporBarang">Lapor Barang</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#smartMatching">Smart Matching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#laporBarang">Lapor Barang</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#smartMatching">Smart Matching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/badgeInfo">Badge</a></li>
                 </ul>
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
-                        <img src="https://ui-avatars.com/api/?name={{ auth()->user()->username }}&background=8b0000&color=fff" class="rounded-circle" width="35">
-                        <span class="text-white">{{ auth()->user()->username }}</span>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if(auth()->user()->foto_profil)
+                            <img src="{{ asset('storage/' . auth()->user()->foto_profil) }}" class="rounded-circle" width="35" height="35" style="object-fit: cover;">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->username }}&background=8b0000&color=fff" class="rounded-circle" width="35" height="35">
+                        @endif
+                        <span style="color: #001f3f" class="fw-semibold">{{ auth()->user()->username }}</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">Profil</a></li>
+                    
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 py-2 mt-2">
                         <li>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <a href="{{ route('profile.myprofile') }}" class="dropdown-item fw-semibold text-primary">
+                                <i class="bi bi-person-fill me-2"></i>Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" class="m-0">
                                 @csrf
-                                <button type="submit" class="dropdown-item text-danger">Keluar</button>
+                                <button type="submit" class="dropdown-item text-danger fw-semibold border-0 bg-transparent w-100 text-start">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Keluar
+                                </button>
                             </form>
                         </li>
                     </ul>
@@ -87,8 +104,16 @@
             </div>
         </div>
     </div>
+
     <div class="container py-5" id="smartMatching">
-    <h3 class="mb-4 fw-bold text-danger">Barang Hilang</h3>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-danger m-0">Barang Hilang</h3>
+            <a href="/barang-hilang" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">
+                Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
         <div class="row g-4 mb-5">
             @forelse($barangHilang as $item)
                 <div class="col-sm-6 col-md-4 col-lg-3">
@@ -101,21 +126,27 @@
                                 <i class="bi bi-geo-alt-fill text-danger"></i> {{ $item->lokasi }}
                             </p>
                             <div class="mt-auto">
-                                <a href="{{ route('barang.detail', $item->id_item) }}" class="btn btn-sm btn-outline-danger w-100 rounded-pill">Detail</a>
+                                <a href="{{ route('barang.detail', $item->id_item) }}" class="btn btn-sm btn-outline-danger w-100 rounded-pill fw-semibold">Detail</a>
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
-                    <p class="text-muted italic text-center py-4 bg-light rounded-3">Belum ada laporan barang hilang.</p>
+                    <p class="text-muted fst-italic text-center py-4 bg-light rounded-3">Belum ada laporan barang hilang.</p>
                 </div>
             @endforelse
         </div>
 
         <hr class="my-5 border-2 opacity-10">
 
-        <h3 class="mb-4 fw-bold style="color: #000080;">Barang Temuan</h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold m-0" style="color: #000080;">Barang Temuan</h3>
+            <a href="/barang-temuan" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold" style="color: #000080; border-color: #000080;">
+                Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
         <div class="row g-4 mb-5">
             @forelse($barangTemuan as $item)
                 <div class="col-sm-6 col-md-4 col-lg-3">
@@ -128,18 +159,114 @@
                                 <i class="bi bi-geo-alt-fill text-primary"></i> {{ $item->lokasi }}
                             </p>
                             <div class="mt-auto">
-                                <a href="{{ route('barang.detail', $item->id_item) }}" class="btn btn-sm btn-outline-primary w-100 rounded-pill">Detail</a>
+                                <a href="{{ route('barang.detail', $item->id_item) }}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-semibold" style="color: #000080; border-color: #000080;">Detail</a>
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
-                    <p class="text-muted italic text-center py-4 bg-light rounded-3">Belum ada laporan barang temuan.</p>
+                    <p class="text-muted fst-italic text-center py-4 bg-light rounded-3">Belum ada laporan barang temuan.</p>
                 </div>
             @endforelse
         </div>
     </div>
+
+    <section id="smartMatching" class="py-5 bg-light border-top border-bottom">
+    <div class="container">
+            
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h3 class="fw-bold text-dark m-0">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Smart Matching AI
+                    </h3>
+                    <p class="text-muted small m-0">Rekomendasi barang temuan yang mirip dengan laporan kehilangan kamu.</p>
+                </div>
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-semibold">
+                    Automated Match
+                </span>
+            </div>
+
+            @auth
+                @if($rekomendasiTemuan->isNotEmpty())
+                    <div class="row g-4">
+                        @foreach($rekomendasiTemuan as $temuan)
+                            <div class="col-sm-6 col-md-4 col-lg-3">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative bg-white transition-hover">
+                                    
+                                    <span class="position-absolute top-0 start-0 m-3 badge bg-dark bg-opacity-75 text-uppercase fw-bold" style="font-size: 10px; z-index: 2;">
+                                        {{ $temuan->kategori }}
+                                    </span>
+
+                                    <div class="position-relative bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                        @if($temuan->foto_barang)
+                                            <img src="{{ asset('storage/' . $temuan->foto_barang) }}" class="w-100 h-100" style="object-fit: cover;">
+                                        @else
+                                            <div class="text-center text-muted">
+                                                <i class="bi bi-image fs-1 d-block opacity-50"></i>
+                                                <span style="font-size: 11px;">Tidak ada foto</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                        <div>
+                                            <h6 class="fw-bold text-dark text-truncate mb-1">{{ $temuan->nama_barang }}</h6>
+                                            <p class="text-muted small text-truncate-2 mb-3" style="font-size: 0.8rem; height: 38px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;">
+                                                {{ $temuan->deskripsi ?? 'Tidak ada deskripsi ciri fisik.' }}
+                                            </p>
+                                        </div>
+
+                                        <div class="border-top pt-2">
+                                            <div class="d-flex align-items-center text-secondary small mb-1">
+                                                <i class="bi bi-geo-alt-fill text-success me-1"></i>
+                                                <span class="text-truncate">{{ $temuan->lokasi }}</span>
+                                            </div>
+                                            <div class="text-muted italic mb-3" style="font-size: 0.7rem;">
+                                                <i class="bi bi-calendar3 me-1"></i>{{ \Carbon\Carbon::parse($temuan->tanggal_kejadian)->diffForHumans() }}
+                                            </div>
+                                            
+                                            <a href="/barang/detail/{{ $temuan->id_item }}" class="btn btn-primary btn-sm w-100 rounded-pill fw-semibold shadow-sm">
+                                                Lihat Detail <i class="bi bi-arrow-right-short ms-1"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-5 px-3 bg-white border rounded-4 shadow-sm">
+                        <div class="p-3 bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-block mb-3">
+                            <i class="bi bi-search-heart fs-1"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark">Belum Ada Kecocokan</h5>
+                        <p class="text-muted small mx-auto" style="max-width: 450px;">
+                            Sistem Smart Matching belum menemukan barang temuan yang mirip dengan properti barang hilangmu saat ini, atau kamu belum membuat laporan kehilangan.
+                        </p>
+                        <a href="#laporBarang" class="btn btn-sm btn-outline-danger rounded-pill px-4 fw-semibold mt-2">
+                            Buat Laporan Sekarang
+                        </a>
+                    </div>
+                @endif
+            @else
+                <div class="text-center py-5 px-3 bg-white border rounded-4 shadow-sm">
+                    <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-circle d-inline-block mb-3">
+                        <i class="bi bi-lock-fill fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Fitur Terkunci</h5>
+                    <p class="text-muted small mx-auto" style="max-width: 400px;">
+                        Silakan masuk akun terlebih dahulu untuk melihat rekomendasi otomatis pencocokan barang temuan secara *real-time*.
+                    </p>
+                    <a href="/login" class="btn btn-sm btn-dark rounded-pill px-4 fw-semibold mt-1">
+                        Masuk Akun
+                    </a>
+                </div>
+            @endauth
+
+        </div>
+    </section>
 
     <footer class="py-4 text-center mt-5 bg-white border-top">
         <p class="text-muted small mb-0">&copy; 2026 FoundIt - The Founder</p>
